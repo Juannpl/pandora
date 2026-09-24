@@ -2,3 +2,8 @@ __pycache__
 *.pyc
 *.pyo
 .git
+
+# Configuration locale
+.env
+.env.*
+!.env.example

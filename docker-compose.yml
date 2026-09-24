@@ -8,7 +8,9 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - PYTHONPATH=/app  # Définit le PYTHONPATH pour que FastAPI trouve les modules
+      PYTHONPATH: /app  # Définit le PYTHONPATH pour que FastAPI trouve les modules
+      SECRET_KEY: ${SECRET_KEY:?Définissez SECRET_KEY dans .env}
+      DATABASE_URL: ${DATABASE_URL:?Définissez DATABASE_URL dans .env}
     depends_on:
       - postgres
     networks:
@@ -19,9 +21,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: pandora_user
-      POSTGRES_PASSWORD: pandora_user
-      POSTGRES_DB: pandora_db
+      POSTGRES_USER: ${POSTGRES_USER:?Définissez POSTGRES_USER dans .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Définissez POSTGRES_PASSWORD dans .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Définissez POSTGRES_DB dans .env}
     networks:
       - data
 

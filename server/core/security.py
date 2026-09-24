@@ -1,10 +1,10 @@
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 import jwt
+from core.config import SECRET_KEY
 
 # Configuration de la sécurité
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-SECRET_KEY = "your_secret_key"  # Changez cela en une clé sécurisée
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

@@ -1,10 +1,9 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
+from core.config import DATABASE_URL
 
 # Créez une instance de Base
 Base = declarative_base()
-
-DATABASE_URL = "postgresql+asyncpg://pandora_user:pandora_user@postgres:5432/pandora_db"
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 

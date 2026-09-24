@@ -80,6 +80,19 @@ La configuration Android du dépôt cible le **SDK 34**. Python et PostgreSQL so
 Depuis la racine du dépôt :
 
 ```bash
+cp .env.example .env
+openssl rand -hex 32
+```
+
+Dans `.env`, renseigne `SECRET_KEY` avec la clé générée, choisis un `POSTGRES_PASSWORD` et reporte ce mot de passe dans `DATABASE_URL`. Les identifiants et le nom de base de cette URL doivent correspondre à `POSTGRES_USER`, `POSTGRES_PASSWORD` et `POSTGRES_DB`. Encode les caractères spéciaux du mot de passe pour une URL si nécessaire.
+
+Compose lit automatiquement le fichier `.env`, ignoré par Git, et transmet les variables aux conteneurs. L’API exige `SECRET_KEY` et `DATABASE_URL`, sans valeur par défaut. Pour un lancement hors Docker, exporte ces deux variables dans le shell ; le fichier `.env` n’est pas chargé automatiquement par Python. Adapte alors l’hôte et le port de `DATABASE_URL` à une instance PostgreSQL accessible.
+
+Avec un volume PostgreSQL existant, conserve ses identifiants : modifier `.env` ne change pas le mot de passe déjà enregistré dans la base.
+
+Puis démarre les services :
+
+```bash
 docker compose up --build -d
 ```
 
@@ -243,7 +256,7 @@ Le backend ne contient pas encore de suite de tests dédiée. Swagger UI permet 
 - Corriger le champ « Nom », actuellement lié à la valeur du prénom, et décider du stockage du numéro de téléphone, absent du modèle backend.
 - Corriger la mise à jour du mot de passe : le service affecte `password_hash`, alors que le modèle utilise `hashed_password`.
 - Ajouter la vérification des JWT et les autorisations aux routes utilisateurs, actuellement sans contrôle d’accès.
-- Retirer `hashed_password` des réponses API et externaliser la clé JWT ainsi que les identifiants de base de données, actuellement définis dans le code et Compose.
+- Retirer `hashed_password` des réponses API.
 - Fixer les versions des dépendances Python pour rendre l’installation reproductible.
 
 Ces éléments décrivent l’état du dépôt ; l’authentification et le parcours mobile complet restent à consolider avant une mise en production.
