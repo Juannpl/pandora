@@ -248,13 +248,32 @@ npm run lint
 npm test
 ```
 
-Le backend ne contient pas encore de suite de tests dédiée. Swagger UI permet d’explorer les routes et de réaliser les premiers essais manuels.
+Pour exécuter les tests backend (Python 3.11 ou 3.12), depuis la racine :
+
+```bash
+cd server
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+```
+
+La suite couvre les variables d’environnement obligatoires, le hachage des mots de passe, la signature et l’expiration des JWT, le démarrage de l’API, le CRUD utilisateurs, les doublons, la validation et l’authentification, y compris le changement de mot de passe.
+
+Par défaut, chaque test API dispose d’une base SQLite en mémoire. Les tests n’utilisent ni `.env` ni la connexion applicative. Pour tester sur une base PostgreSQL dédiée, fournis `TEST_DATABASE_URL` :
+
+```bash
+TEST_DATABASE_URL='postgresql+asyncpg://utilisateur:mot_de_passe@localhost:5432/pandora_test' python -m pytest -q
+```
+
+Chaque test PostgreSQL crée un schéma temporaire unique et le supprime à la fin ; le compte de test doit pouvoir créer des schémas. Le démarrage réel de l’API crée les tables dans ce schéma.
+
+Le workflow [Backend tests](.github/workflows/backend-tests.yml) lance la suite sur chaque push et pull request, ainsi que manuellement, avec Python 3.11 et un service PostgreSQL 15 éphémère. Ses identifiants servent uniquement à ce service de test ; aucun secret GitHub n’est requis. Les dépendances de test sont définies dans `server/requirements-dev.txt`. La version de bcrypt est limitée à `<5` pour rester compatible avec Passlib 1.7.4.
 
 ### Points à finaliser dans le prototype
 
 - Aligner l’URL d’inscription mobile sur le préfixe `/api/v1` et connecter le formulaire de connexion à l’API.
 - Corriger le champ « Nom », actuellement lié à la valeur du prénom, et décider du stockage du numéro de téléphone, absent du modèle backend.
-- Corriger la mise à jour du mot de passe : le service affecte `password_hash`, alors que le modèle utilise `hashed_password`.
 - Ajouter la vérification des JWT et les autorisations aux routes utilisateurs, actuellement sans contrôle d’accès.
 - Retirer `hashed_password` des réponses API.
 - Fixer les versions des dépendances Python pour rendre l’installation reproductible.
@@ -270,7 +289,7 @@ Les prochaines étapes issues de la vision du projet sont :
 - [ ] Intégrer une source de données pour les films et séries.
 - [ ] Développer puis évaluer un moteur de recommandation personnalisé.
 - [ ] Afficher les suggestions dans l’application mobile.
-- [ ] Ajouter des tests d’intégration et automatiser la validation du projet.
+- [x] Ajouter des tests d’intégration backend et automatiser leur exécution en CI.
 
 ## 👥 Équipe
 

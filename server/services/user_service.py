@@ -52,8 +52,8 @@ async def update_user(db: AsyncSession, user_id: int, user_update: UserUpdate) -
         user.last_name = user_update.last_name
     if user_update.email is not None:
         user.email = user_update.email
-    if user_update.password is not None:  # Check if password is being updated
-            user.password_hash = hash_password(user_update.password)  # Hash the new password
+    if user_update.password is not None:
+        user.hashed_password = hash_password(user_update.password)
 
 
     await db.commit()

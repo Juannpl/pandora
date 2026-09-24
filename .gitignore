@@ -6,3 +6,9 @@
 # Cache Python
 __pycache__/
 *.py[cod]
+
+# Environnements et résultats de tests Python
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
